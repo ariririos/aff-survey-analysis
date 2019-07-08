@@ -1,0 +1,108 @@
+Kinds of questions to answer:
+[x] demographics (if res assoc exists, count) => who answered? 
+    [x] implementation
+    [x] schema
+[ ] subdemographics (if res assoc is x, count) => what kinds of students and grads answered? what were the averages of students and parents answering? e.g. mode of 2021 currstu answering, 2017 grads answering, average of 2022.3 class year, median of 2021 class year
+    [x] implementation
+    [ ] schema
+[ ] percentages of types of responses for each question (37% of currstu agreed with statement)
+    [ ] implementation
+    [ ] schema
+    [!] do I want this in here? maybe cause it would all be in one analysis but it would also get very very long
+[ ] how often was there a non-null answer to a "what do you need help with" question => "37% of currstu answered this question"
+    [x] implementation
+    [ ] schema
+[ ] mean and median responses to Likerts (average response to this question was 3.4 (neutral with a skew towards disagree), median was 3)
+    [x] implementation
+    [ ] schema
+[ ] mode responses to Likerts
+    [x] implementation
+    [ ] schema
+[ ] additional intra-question stats (stddev, variation)
+[ ] additional cross-question stats (???)
+[ ] stats for checkbox questions (37% of students wanted more help in math, 34% of students wanted more help in social studies)
+    [ ] answers by choice
+        [!] same question as % per question -- too long?
+    [x] mode choice
+[ ] variations in how a question was answered across subgroups (37% of parents answered this question agree, 47% of currstu agreed;)
+    [ ] this is the inverse of how I'm doing this, so maybe do crosschecks after the first two categories instead of mixing them in -- otherwise you'll have repetition
+    [ ] link to cross-tabulation at bottom in question
+    [ ] see note on aggResByQuestion structure
+    [ ] implementation
+[ ] percentages of answering a question a certain way if you answered a different question a certain way (37% of currstu who agreed with Q41 also agreed with this question)
+    [ ] can include in question, link to the original and link to the cross-checked question from the original
+    [ ] for cross-checking, there's two directions: list as alternate interpretation (25% (of 40) of students who agreed with Q41 agreed with Q42; 33% (or 30) of students who agreed with Q42 agreed with Q41)
+    [ ] you can also have multi-cross checks (70% of agree/neutral also answered agree/neutral)
+        [x] implementation
+        [ ] schema
+    [ ] you can also have multiple cross checks per question
+        [x] implementation
+        [ ] schema
+    [x] implementation
+[ ] within-question cross-checking:
+    [ ] i.e. did students who couldn't find help with math also say they couldn't find help with science? => maybe display as "students who answered math answered {} 70% of the time"
+    [ ] implementation
+[ ] overall: questions that had significant skipping from certain groups and across groups (>x%); all text responses outputted for a question (mark in stats schema to just spit out the data, don't do any analysis); % of questions answered per subgroup
+
+[ ] for new questions, add to: 
+    - globalSymbols: questionTypes and questionShortTitles
+    - dataStructureSchema
+    - questionStatsSchema
+[ ] skipped: [34, 35, 36, 37, 39, 40, 44] TEXT, 
+
+
+BIG THINK:
+[ ] which questions do I want to cross-check?
+    [ ] couldn't find SAT help 1=> too basic or advanced? 1=> help unavailable at times I wanted?
+
+[ ] to mix with incompletes: have a similar data structure that just nest checks for answers to questions and short circuits to removing the response if any aren't answered
+[ ] aggResByQuestion as currently set up removes the assoc info from the answers -- this is fine for now, but when looking at differences in answers between associations that answered the same question, it won't have enough data to differentiate
+    [ ] I might be able to just disregard the (agg) that's passed in and look at resByAssoc myself and construct a new aggResByQuestionByAssoc 
+
+/**
+ * Notes on data structure: 
+ * arrangedResponses[i].get(questionTitles[j]) is the text of the answer choice if single choice possible (either bullets or dropdown)
+ * arrangedResponses[i].get(questionTitles[j]) is a comma separated list if multiple choice, just answer choice if only one selected
+ * purely text/graphic questions don't seem to be included
+ * there are only single/multiple choice, textbox, and dropdown questions in this survey
+ */
+
+ /**
+  * Todo:
+  * - deal with incomplete (maybe have some schema of what they need to have answered to be considered) + check for duplicates (in completed and incomplete)
+  * - spit out % per answer for all questions in each path
+  * - diagram paths (probably a Map with nesting where a function that determines whether to take the path and check answers for each response -- how would it interact with incomplete checking?)
+  * - visually diagram: e.g.
+  *     Current students
+  *     |
+  *     |----- Class year: {text responses}
+  *     |----- Likert 1:
+  *            |
+  *            |------ I feel able to handle {}:
+  *            |------ Agree: 90%
+  *            |------ (...)
+  *            |------ average = {} (text describing what means)
+  *            |------ std. dev = ()
+  *            |------ cross checking: answer to this question is referenced in {Q37(link), Q48(link), ...}
+  *            |------ cross checking:
+  *                    |-------- {97%} of {current students} who {disagreed or were neutral} on {Q37 ('support is too basic/advanced')} {agreed} with this statement
+  * example: {
+  *     (r => r in resByAssoc.currStu): {
+  *         (r => r.get(questionTitles[12]) !== null): 
+  *             [questionTitles[12], assoc.cS, r.get
+  *             (questionTitles[12])]
+  *         (r => r.get(questionTitles[13]) !== null): {
+  *             stats: [questionTitles[13], assoc.cS]
+  *     }
+  * }
+  * => this says, if res is from a currStu, and if question 12 is answered, look at question 12
+  * - behavior: if Array[3] parse and add to stats for that question and categorization => spit out average answers per question per categorization using passed in (use questionTitles enum to determine which stats to spit out -- Likert, number average, or something else)
+  * - behavior: if obj: {
+  *     stats: Array[3] required // treat as above
+  *   
+  *   }
+  *    
+  * - could combine tree/graph and data structure: ['Current students', () => {}] : {
+  *     [questionText[41], () => {}]: [qt, assoc, r.get]
+  * }         
+  */

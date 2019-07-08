@@ -1,0 +1,26 @@
+{
+  "name": "aff-survey-analysis",
+  "version": "0.0.0",
+  "description": "AFF Survey Analysis",
+  "main": "packaging.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rioc0719/aff-survey-analysis.git"
+  },
+  "author": "Cristian Rios <cristian.rios0719@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rioc0719/aff-survey-analysis/issues"
+  },
+  "homepage": "https://github.com/rioc0719/aff-survey-analysis#readme",
+  "dependencies": {
+    "blessed": "^0.1.81",
+    "blessed-contrib": "^4.8.16",
+    "chalk": "^2.4.2",
+    "csv-parse": "^4.4.3",
+    "treeify": "^1.1.0"
+  }
+}
