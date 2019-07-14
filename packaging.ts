@@ -1,25 +1,28 @@
-const fs = require('fs');
-const { promisify } = require('util');
+import * as fs from 'fs';
+import { promisify } from 'util';
+import csvParse from 'csv-parse';
+import { QuestionTitle, ResByAssoc, assocDictByLong } from './globalSymbols';
+import analyzeData from './analysis';
+import debugFn from 'debug';
+
+const debug = debugFn('packaging');
 const readFileAsync = promisify(fs.readFile);
-// const writeFileAsync = promisify(fs.writeFile);
-const csvParse = require('csv-parse');
-const csvParseAsync = promisify(csvParse);
-const { assocDictByLong } = require('./globalSymbols');
-const analyzeData = require('./analysis');
+const csvParseAsync: (a: string) => Promise<any> = promisify(csvParse);
+
 
 (async() => {
     // Get data
+    debug('Loading files');
     const data = await readFileAsync('affcsv.csv', 'utf8');
     const jsonData = await csvParseAsync(data);
-    
+    debug('Files loaded and parsed');
+
     // Categorize data
-    const questionTitles = jsonData[0];
-    // const questionTexts = jsonData[1];
-    // const importIDs = jsonData[2]; // what even are these??
+    const questionTitles: QuestionTitle[] = jsonData[0];
     const surveyResponses = jsonData.slice(3);
 
     // Arrange data
-    const arrangedResponses = [];
+    const arrangedResponses: Map<QuestionTitle,string>[] = [];
     for (let response of surveyResponses) {
         const arrRes = new Map();
         questionTitles.forEach((title, i) => {
@@ -27,22 +30,23 @@ const analyzeData = require('./analysis');
         });
         arrangedResponses.push(arrRes);
     }
-    // const titlesToTexts = questionTitles.reduce((obj, title, i) => { obj[title] = questionTexts[i]; return obj; }, {});
+    debug('Data arranged');
 
     // Filter for only completed surveys
     const compSymbol = questionTitles[5];
     const compArrRes = arrangedResponses.filter(res => res.get(compSymbol) === 'True');
+    debug('Responses filtered');
 
     // Extract buckets
-    
-    const resByAssoc = {};
+    const resByAssoc: ResByAssoc = {};
     Object.entries(assocDictByLong).forEach(([, assoc]) => { resByAssoc[assoc] = []; });
-    
+
     const assocSymbol = questionTitles[11];
     for (let res of compArrRes) {
         const assoc = res.get(assocSymbol);
         resByAssoc[assocDictByLong[assoc]].push(res);
     }
+    debug('Responses extracted');
 
     // Analysis
     analyzeData({
@@ -51,6 +55,7 @@ const analyzeData = require('./analysis');
         resByAssoc,
         questionTitles
     });
+    debug('Analysis complete');
 
     // Print graph of something
 

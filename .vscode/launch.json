@@ -5,7 +5,13 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/index.js"
+            "program": "${workspaceFolder}/packaging.ts",
+            "env": {
+                "DEBUG": "*"
+            },
+            "outFiles": [
+                "${workspaceFolder}/out/**/*.js"
+            ]
         }
     ]
 }

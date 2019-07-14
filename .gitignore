@@ -89,3 +89,9 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
+
+# Private data
+affcsv.csv
+
+# Typescript output
+out/

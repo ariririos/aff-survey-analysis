@@ -1,10 +1,14 @@
-const { questionTitlesToShortTitlesClosure } = require('./globalSymbols');
+import { ResByAssoc, QuestionTitle } from './globalSymbols';
 
 /**
- * Data structure:
- * Tuple: [["Name of current branch", Function<Bool> if should go down this branch?] , ["categorization for aggResByQuestion", Function<T> that outputs the requested data]]
+ * Defines the minimum questions that need to be answered for a response to be considered complete. All fully complete survey responses should count, and some less-than-complete responses should also.
+ * - Basic criteria: filling out all the required questions for flow (association and the teacher likert switch)
+ * - Filling out at least one question from each likert presented
+ * - idea: should spit out some brackets: perfect (all questions completed), passing (minimum requirements for consideration met), anything in between (maybe include subcategories by % answered as breakpoints)
+ * - schema needs to include data per question that says, 1: required, 2: part of aggregate (meet some %), 3: not required at all
+ * - interpreter should filter out for -99 (or should it? should it be replacing -99s in responses with something?)
  */
-module.exports = (resByAssoc, questionTitles, questionTitlesToShortTitles = questionTitlesToShortTitlesClosure(questionTitles)) =>
+export default (resByAssoc: ResByAssoc, questionTitles: QuestionTitle[]) =>
 [
     [
         ['All respondents', () => true],
@@ -161,6 +165,71 @@ module.exports = (resByAssoc, questionTitles, questionTitlesToShortTitles = ques
                 ],
                 [
                     110 // why wouldn't ask peers for help?
+                ]
+            ]
+    ],
+    [
+        ['Current student parents', r => resByAssoc.csp.includes(r)],
+            [
+                [
+                    14
+                ],
+                [
+                    15
+                ],
+                [
+                    34
+                ],
+                [
+                    35
+                ],
+                [
+                    36
+                ],
+                [
+                    37
+                ],
+                [
+                    38
+                ],
+                [
+                    39
+                ],
+                [
+                    40
+                ],
+                [
+                    41
+                ],
+                [
+                    42
+                ],
+                [
+                    43
+                ],
+                [
+                    44
+                ],
+                [
+                    45
+                ],
+                [
+                    46
+                ],
+                [
+                    47
+                ],
+                [
+                    48
+                ],
+                [
+                    49
+                ],
+                [
+                    50
+                ],
+                [
+                    51
                 ]
             ]
     ],
