@@ -9,5 +9,7 @@ Outputs to console and to an Express server.
 
 ## Contact
 Cristian Rios as AFF Interim Director, aff-director@mit.edu
+
 Cristian Rios as the AFF survey administrator (for survey questions specifically), aff-survey-admin@mit.edu
+
 Cristian Rios as an Actual Person™, rioc0719@mit.edu
