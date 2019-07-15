@@ -4,6 +4,7 @@ import csvParse from 'csv-parse';
 import { QuestionTitle, ResByAssoc, assocDictByLong } from './globalSymbols';
 import analyzeData from './analysis';
 import debugFn from 'debug';
+import server from './server';
 
 const debug = debugFn('packaging');
 const readFileAsync = promisify(fs.readFile);
@@ -49,7 +50,7 @@ const csvParseAsync: (a: string) => Promise<any> = promisify(csvParse);
     debug('Responses extracted');
 
     // Analysis
-    analyzeData({
+    const outputTree = analyzeData({
         arrangedResponses,
         compArrRes,
         resByAssoc,
@@ -57,23 +58,7 @@ const csvParseAsync: (a: string) => Promise<any> = promisify(csvParse);
     });
     debug('Analysis complete');
 
-    // Print graph of something
-
-    /*
-    const screen = blessed.screen(),
-          graph = blessedContrib.bar({
-              label: 'Test graph',
-              barWidth: 4,
-              barSpacing: 6,
-              xOffset: 0,
-              maxHeight: 9
-          });
-    screen.append(graph);
-    graph.setData({
-        titles: ['bar 1', 'bar 2'],
-        data: [5, 10]
-    });
-    setInterval( () => { screen.render() }, 1000);
-    */
+    debug('Starting server');
+    server(outputTree);
 
 })();

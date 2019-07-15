@@ -5,7 +5,6 @@ import { QuestionTitle, ResByAssoc, Response, questionTypesByTitleClosure, quest
 import { is2D } from './arrayHelpers';
 import chalk from 'chalk';
 import debugFn from 'debug';
-import { ADDRGETNETWORKPARAMS } from 'dns';
 
 // both schemas, and all data
 /* strat:
@@ -107,9 +106,9 @@ export default ({ arrangedResponses, compArrRes, resByAssoc, questionTitles }: {
         const qT1Match = filterByType(arrangedResponses, qT1, a1Arr, a1Method);
         const overlap = filterByType(qT1Match, qT2, a2Arr, a2Method);
 
-        // @ts-ignore
+        // @ts-ignore FIXME:
         const a1ListFormat = new Intl.ListFormat('en', { type: a1Method });
-        // @ts-ignore
+        // @ts-ignore FIXME:
         const a2ListFormat = new Intl.ListFormat('en', { type: a2Method });
 
         let a1Words: string = a1ListFormat.format(a1Arr.map(x => x.toString())), a2Words = a2ListFormat.format(a2Arr.map(x => x.toString()));
@@ -244,4 +243,61 @@ export default ({ arrangedResponses, compArrRes, resByAssoc, questionTitles }: {
     // Print graphic tree
     console.log('Survey analysis results');
     console.log(treeify.asTree(coloredTree, true));
+
+    // Restructure tree to send to server
+    /**
+     * Example structure:
+     * [
+	{"title": "Books", "expanded": true, "folder": true, "children": [
+		{"title": "Art of War", "type": "book", "author": "Sun Tzu", "year": -500, "qty": 21, "price": 5.95},
+		{"title": "The Hobbit", "type": "book", "author": "J.R.R. Tolkien", "year": 1937, "qty": 32, "price": 8.97},
+		{"title": "The Little Prince", "type": "book", "author": "Antoine de Saint-Exupery", "year": 1943, "qty": 21, "price": 5.95},
+		{"title": "Don Quixote", "type": "book", "author": "Miguel de Cervantes", "year": 1615, "qty": 21, "price": 5.95}
+    ]},
+    Use expanded: false,
+    // write tree in a certain order: look for groups in an order and pass them in that order if they exist
+     */
+
+    const outputTree = [], groupOrder = ['All respondents', 'Current students', 'Current student parents', 'Teachers', 'Current student parents and teachers', 'Graduates', 'Graduate parents', 'Exit matter'];
+    for (let group of groupOrder) {
+        if (resultsTree[group] !== undefined) outputTree.push({
+            title: group,
+            children: []
+        });
+    }
+    const attachData = (origObjParentOrValue, parentTree) => {
+        // FIXME: primitive check needed? probably only in case of resultsTree parent group being a primitive
+        if (Object(origObjParentOrValue) !== origObjParentOrValue && origObjParentOrValue !== null) { // checking if primitive value
+            // parentTree should be the children prop of the direct parent
+            parentTree.push({
+                title: origObjParentOrValue,
+            });
+        }
+        else { // either array or object FIXME: nesting unnecessary
+            if (Array.isArray(origObjParentOrValue)) {
+                parentTree.children = [];
+                origObjParentOrValue.forEach(val => parentTree.children.push({ title: val }));
+            }
+            else {
+                parentTree.children = [];
+                for (let [origChildKey, origChildVal] of Object.entries(origObjParentOrValue)) {
+                    // if primitive, attach directly to parentTree
+                    if (Object(origChildVal) !== origChildVal) {
+                        parentTree.children.push({ title: `${origChildKey}: ${origChildVal}` });
+                    }
+                    // else, recurse -- either array or object
+                    else {
+                        const newChild = { title: origChildKey, folder: true, children: [] };
+                        parentTree.children.push(newChild);
+                        attachData(origChildVal, newChild);
+                    }
+                }
+            }
+        }
+    };
+
+    for (let groupParent of outputTree) {
+        groupParent = attachData(resultsTree[groupParent.title], groupParent)
+    }
+    return outputTree;
 }

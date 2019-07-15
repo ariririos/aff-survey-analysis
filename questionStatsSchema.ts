@@ -1,4 +1,4 @@
-import { classYearStats, defaultStatsClosure, multiChoiceStatsClosure, singleChoiceStatsClosure, multiGrpMultiChoiceStatsClosure } from './questionStatsDefaults';
+import { classYearStats, defaultStatsClosure, multiChoiceStatsClosure, singleChoiceStatsClosure, multiGrpMultiChoiceStatsClosure, multiGrpSingleChoiceStatsClosure } from './questionStatsDefaults';
 import { assoc, QuestionTitle, ResByAssoc } from './globalSymbols';
 import { likert3ToNumber, likert5ToNumber, likertFreqToNumber, likert3Map, likert5Map, likertFreqMap } from './likertHelpers';
 
@@ -17,7 +17,8 @@ export default (
         defaultStats = defaultStatsClosure(resByAssoc),
         singleChoiceStats = singleChoiceStatsClosure(resByAssoc),
         multiChoiceStats = multiChoiceStatsClosure(resByAssoc),
-        multiGrpMultiChoiceStats = multiGrpMultiChoiceStatsClosure(resByAssoc)
+        multiGrpMultiChoiceStats = multiGrpMultiChoiceStatsClosure(resByAssoc),
+        // multiGrpSingleChoiceStats = multiGrpSingleChoiceStatsClosure(resByAssoc)
     ) => ({
     'total': () => compArrRes.length,
     'totalCurrStu': () => resByAssoc.cs.length,
@@ -121,7 +122,9 @@ export default (
         [qT[50]]: agg => defaultStats(agg, likert3ToNumber, assoc.csp),
         [qT[51]]: agg => defaultStats(agg, likert3ToNumber, assoc.csp),
     // parents and teachers questions:
-    [qT[140]]: agg => multiGrpMultiChoiceStats(agg, [assoc.csp, assoc.gsp, assoc.t], qT[140]),
+    [qT[140]]: agg => multiGrpMultiChoiceStats(agg, [assoc.csp, assoc.t], qT[140]),
+    [qT[142]]: agg => multiGrpMultiChoiceStats(agg, [assoc.csp, assoc.t], qT[142]),
+    // [qT[144]]: agg => multiGrpSingleChoiceStats(agg, [assoc.csp, assoc.t], qT[144]),
     // gradStu questions:
     [qT[13]]: classYearStats,
 });

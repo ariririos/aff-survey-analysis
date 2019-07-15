@@ -13,21 +13,24 @@ export const assocDictByLong = {
 
  export const assocDictByShort = Object.keys(assocDictByLong).reduce((o, k) => { o[assocDictByLong[k]] = k; return o; }, {});
 
+const twoWayStringDictPrivateStorage = new WeakMap();
+const twoWayStringDictStorage = (obj) => {
+    if (!twoWayStringDictPrivateStorage.has(obj)) twoWayStringDictPrivateStorage.set(obj, Object.create(null));
+    return twoWayStringDictPrivateStorage.get(obj);
+}
+
 class TwoWayStringDict {
-    map: { [x: string]: string };
-    reverseMap: { [x: string]: string };
     constructor(map: { [x: string]: string; }) {
-        this.map = map;
-        this.reverseMap = {};
+        twoWayStringDictStorage(this).reverseMap = {};
         for (let key in map) {
             if (map.hasOwnProperty(key) && key !== 'revGet') {
                 const value = map[key];
                 this[key] = value;
-                this.reverseMap[value] = key;
+                twoWayStringDictStorage(this).reverseMap[value] = key;
             }
         }
     }
-    revGet(key: string) { return this.reverseMap[key]; }
+    revGet(key: string) { return twoWayStringDictStorage(this).reverseMap[key]; }
 }
 
 type AssocDict = { [P: string]: string };
@@ -52,6 +55,7 @@ export const assoc = TwoWayStringDictFactory({
  * @param questionTitles - global question titles array
  */
 export const questionTypesByTitleClosure = (qT: QuestionTitle[]) => ({
+    // CURRSTU
     [qT[12]]: 'singleChoice',
     [qT[68]]: 'singleChoice',
     [qT[69]]: 'singleChoice',
@@ -90,9 +94,33 @@ export const questionTypesByTitleClosure = (qT: QuestionTitle[]) => ({
     [qT[108]]: 'likert3',
     [qT[109]]: 'likert3',
     [qT[110]]: 'multiChoice',
+    // CURRSTUPARENT
+    [qT[14]]: 'singleChoice',
+    [qT[15]]: 'multiChoice',
+    [qT[34]]: 'likert3',
+    [qT[35]]: 'likert3',
+    [qT[36]]: 'likert3',
+    [qT[37]]: 'likert3',
+    [qT[38]]: 'likert3',
+    [qT[39]]: 'likert3',
+    [qT[40]]: 'likert3',
+    [qT[41]]: 'likert3',
+    [qT[42]]: 'likert3',
+    [qT[43]]: 'likert3',
+    [qT[44]]: 'likert3',
+    [qT[45]]: 'likert3',
+    [qT[46]]: 'likert3',
+    [qT[47]]: 'likert3',
+    [qT[48]]: 'likert3',
+    [qT[49]]: 'likert3',
+    [qT[50]]: 'likert3',
+    [qT[51]]: 'likert3',
+    // PARENTS + TEACHERS
+    [qT[140]]: 'multiChoice',
+    [qT[142]]: 'multiChoice',
+    // [qT[144]]: 'singleChoice',
     // GRADSTU
     [qT[13]]: 'textbox',
-    // CURRSTUPARENT
 });
 
 /**
@@ -162,6 +190,10 @@ export const questionTitlesToShortTitlesClosure = (qT: QuestionTitle[]) => ({
         [qT[49]]: 'Likert 2: Support helpful this year?',
         [qT[50]]: 'Likert 2: Support too basic or too advanced for student?',
         [qT[51]]: 'Likert 2: I know whom to talk to if unsatisfied with quality of support?',
+    // PARENTS + TEACHERS
+    [qT[140]]: 'Which subjects would your student(s) want help with?',
+    [qT[142]]: 'Which other academics would your student(s) want help with?',
+    // [qT[144]]: 'Would peer mentoring be helpful for your student(s)?',
     // GRADSTU
     [qT[13]]: 'Years that answered'
 });

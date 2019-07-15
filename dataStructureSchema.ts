@@ -235,11 +235,19 @@ export default function(resByAssoc: ResByAssoc, questionTitles: QuestionTitle[])
                 ]
         ],
         [
-            ['Parents and teachers', r => ['csp', 'gsp', 't'].some(type => resByAssoc[type].includes(r))],
+            ['Current student parents and teachers', r => ['csp', 't'].some(type => resByAssoc[type].includes(r))],
             [
                 [
                     140
+                ],
+                [
+                    142
+                ],
+                /*
+                [
+                    144
                 ]
+                */
             ]
         ],
         [
