@@ -91,7 +91,6 @@ typings/
 .dynamodb/
 
 # Private data
-affcsv.csv
 jsonData.json
 
 # Typescript output
