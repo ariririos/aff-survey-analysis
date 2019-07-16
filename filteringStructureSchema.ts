@@ -8,6 +8,8 @@ import { ResByAssoc, QuestionTitle } from './globalSymbols';
  * - schema needs to include data per question that says, 1: required, 2: part of aggregate (meet some %), 3: not required at all
  * - interpreter should filter out for -99 (or should it? should it be replacing -99s in responses with something?)
  */
+
+/*
 export default (resByAssoc: ResByAssoc, questionTitles: QuestionTitle[]) =>
 [
     [
@@ -29,12 +31,12 @@ export default (resByAssoc: ResByAssoc, questionTitles: QuestionTitle[]) =>
                         ['totalGradStu', () => null]
                     ],
                     [
-                        ['Current student parents', r => resByAssoc.csp.includes(r)],
-                        ['totalCurrStuParent', () => null]
+                        ['Current student parents/guardians', r => resByAssoc.csp.includes(r)],
+                        ['totalCurrStuParentGuardian', () => null]
                     ],
                     [
-                        ['Graduate parents', r => resByAssoc.gsp.includes(r)],
-                        ['totalGradStuParent', () => null]
+                        ['Graduate parents/guardians', r => resByAssoc.gsp.includes(r)],
+                        ['totalGradStuParentGuardian', () => null]
                     ],
                     [
                         ['Teachers', r => resByAssoc.t.includes(r)],
@@ -169,7 +171,7 @@ export default (resByAssoc: ResByAssoc, questionTitles: QuestionTitle[]) =>
             ]
     ],
     [
-        ['Current student parents', r => resByAssoc.csp.includes(r)],
+        ['Current student parents/guardians', r => resByAssoc.csp.includes(r)],
             [
                 [
                     14
@@ -242,3 +244,4 @@ export default (resByAssoc: ResByAssoc, questionTitles: QuestionTitle[]) =>
         ]
     ]
 ];
+*/

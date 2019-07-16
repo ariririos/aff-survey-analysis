@@ -36,7 +36,10 @@ export const arrMode = function<T> (arr: T[]): [number, T[]] {
 export const arrMedian = (arr: number[]) => {
     const sorted = arr.sort();
     if (sorted.length % 2 === 1) return sorted[Math.floor(arr.length / 2)];
-    return (sorted[arr.length / 2] + sorted[(arr.length / 2) - 1]) / 2;
+    // FIXME:
+    const median = (sorted[arr.length / 2] + sorted[(arr.length / 2) - 1]) / 2;
+    // if (Number.isNaN(median)) throw 'ya fucked up';
+    return median;
 };
 
 export const is2D = (arr: any[]) =>  arr.every(item => Array.isArray(item));

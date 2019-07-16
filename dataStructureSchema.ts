@@ -4,12 +4,13 @@ import { ResByAssoc, QuestionTitle, Response } from './globalSymbols';
  * Tuple structure:
  * [["Name of current branch", Function<Bool> if should go down this branch?] , ["categorization for aggResByQuestion", Function<T> that outputs the requested data]]
  */
-
-type DataSchemaValue = [[string, (r?: Response) => boolean], [string, (((r?: Response) => string))] | DataSchema | number[][]];
+type DataSchemaValue = [[string, (r?: Response) => boolean], [string, (((r?: Response) => string))] | DataSchema | (number[] | DataSchemaValueDummy)[]];
 
 interface DataSchema extends Array<DataSchemaValue> { }
+interface DataSchemaValueDummy extends DataSchemaValue {}
 
-export default function(resByAssoc: ResByAssoc, questionTitles: QuestionTitle[]): DataSchema {
+// FIXME: compArrRes should be moved to filteringSchema
+export default function(resByAssoc: ResByAssoc, compArrRes: Map<QuestionTitle, string>[], questionTitles: QuestionTitle[]): DataSchema {
     return [
         [
             ['All respondents', () => true],
@@ -30,12 +31,12 @@ export default function(resByAssoc: ResByAssoc, questionTitles: QuestionTitle[])
                             ['totalGradStu', () => null]
                         ],
                         [
-                            ['Current student parents', r => resByAssoc.csp.includes(r)],
-                            ['totalCurrStuParent', () => null]
+                            ['Current student parents/guardians', r => resByAssoc.csp.includes(r)],
+                            ['totalCurrStuParentGuardian', () => null]
                         ],
                         [
-                            ['Graduate parents', r => resByAssoc.gsp.includes(r)],
-                            ['totalGradStuParent', () => null]
+                            ['Graduate parents/guardians', r => resByAssoc.gsp.includes(r)],
+                            ['totalGradStuParentGuardian', () => null]
                         ],
                         [
                             ['Teachers', r => resByAssoc.t.includes(r)],
@@ -170,7 +171,7 @@ export default function(resByAssoc: ResByAssoc, questionTitles: QuestionTitle[])
                 ]
         ],
         [
-            ['Current student parents', r => resByAssoc.csp.includes(r)],
+            ['Current student parents/guardians', r => resByAssoc.csp.includes(r)],
                 [
                     [
                         14
@@ -235,7 +236,80 @@ export default function(resByAssoc: ResByAssoc, questionTitles: QuestionTitle[])
                 ]
         ],
         [
-            ['Current student parents and teachers', r => ['csp', 't'].some(type => resByAssoc[type].includes(r))],
+            ['Current and former teachers', r => resByAssoc.t.includes(r)],
+            [
+                [
+                    18
+                ],
+                [
+                    19
+                ],
+                [
+                    20
+                ],
+                [
+                    21
+                ],
+                [
+                    22
+                ],
+                [
+                    23
+                ],
+                [
+                    24
+                ],
+                [
+                    ['Teachers who have been asked for other academics support', r => resByAssoc.t.includes(r) && r.get(questionTitles[24]) === 'Yes'],
+                    [
+                        [
+                            25
+                        ],
+                        [
+                            ['"Yes, every time I was asked."', r => resByAssoc.t.includes(r) && r.get(questionTitles[25]) === "Yes, every time I was asked."],
+                            [
+                                [
+                                    26
+                                ],
+                                [
+                                    27
+                                ]
+                            ]
+                        ],
+                        [
+                            ['"Yes, but not every time I was asked."', r => resByAssoc.t.includes(r) && r.get(questionTitles[25]) === "Yes, but not every time I was asked."],
+                            [
+                                [
+                                    28
+                                ],
+                                [
+                                    29
+                                ],
+                                [
+                                    30
+                                ],
+                                [
+                                    31
+                                ]
+                            ]
+                        ],
+                        [
+                            ['"No, not every time."', r => resByAssoc.t.includes(r) && r.get(questionTitles[25]) === "No, I have never provided support with other academics when I was asked. (e.g. I referred the student to someone else)"],
+                            [
+                                [
+                                    32
+                                ],
+                                [
+                                    33
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        [
+            ['Current student parents/guardians and teachers', r => ['csp', 't'].some(type => resByAssoc[type].includes(r))],
             [
                 [
                     140
@@ -243,11 +317,9 @@ export default function(resByAssoc: ResByAssoc, questionTitles: QuestionTitle[])
                 [
                     142
                 ],
-                /*
                 [
                     144
                 ]
-                */
             ]
         ],
         [
@@ -255,6 +327,146 @@ export default function(resByAssoc: ResByAssoc, questionTitles: QuestionTitle[])
             [
                 [
                     13
+                ],
+                [
+                    112
+                ],
+                [
+                    113
+                ],
+                [
+                    114
+                ],
+                [
+                    115
+                ],
+                [
+                    116
+                ],
+                [
+                    117
+                ],
+                [
+                    118
+                ],
+                [
+                    119
+                ],
+                [
+                    120
+                ],
+                [
+                    121
+                ],
+                [
+                    122
+                ],
+                [
+                    123
+                ],
+                [
+                    124
+                ],
+                [
+                    125
+                ],
+                [
+                    126
+                ],
+                [
+                    127
+                ],
+                [
+                    128
+                ],
+                [
+                    129
+                ],
+                [
+                    130
+                ],
+                [
+                    131
+                ],
+                [
+                    132
+                ],
+                [
+                    134
+                ],
+                [
+                    136
+                ],
+                [
+                    138
+                ]
+            ]
+        ],
+        [
+            ['Graduate parents/guardians', r => resByAssoc.gsp.includes(r)],
+            [
+                [
+                    16
+                ],
+                [
+                    17
+                ],
+                [
+                    52
+                ],
+                [
+                    53
+                ],
+                [
+                    54
+                ],
+                [
+                    55
+                ],
+                [
+                    56
+                ],
+                [
+                    57
+                ],
+                [
+                    58
+                ],
+                [
+                    59
+                ],
+                [
+                    60
+                ],
+                [
+                    61
+                ],
+                [
+                    62
+                ],
+                [
+                    63
+                ],
+                [
+                    64
+                ],
+                [
+                    65
+                ],
+                [
+                    66
+                ],
+                [
+                    67
+                ]
+            ]
+        ],
+        [
+            ['Exit matter', r => compArrRes.includes(r)],
+            // FIXME: compArrRes filtering
+            [
+                [
+                    145
                 ]
             ]
         ]

@@ -55,7 +55,8 @@ Kinds of questions to answer:
     - globalSymbols: questionTypes and questionShortTitles
     - dataStructureSchema
     - questionStatsSchema
-[ ] skipped: [34, 35, 36, 37, 39, 40, 44, 56, 57] TEXT,
+[ ] skipped: [34, 35, 36, 37, 39, 40, 44, 56, 57, 51, 52, 53, 54] TEXT,
+[ ] not handling 'unsure' answers right now
 
 
 BIG THINK:

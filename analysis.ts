@@ -32,7 +32,7 @@ import debugFn from 'debug';
 export default ({ arrangedResponses, compArrRes, resByAssoc, questionTitles }: { arrangedResponses: Response[], compArrRes: Response[], resByAssoc: ResByAssoc, questionTitles: QuestionTitle[]}) => {
     const debug = debugFn('analysis');
     const questionStatsSchema = questionStatsSchemaClosure(compArrRes, resByAssoc, questionTitles);
-    const dataStructureSchema = dataStructureSchemaClosure(resByAssoc, questionTitles);
+    const dataStructureSchema = dataStructureSchemaClosure(resByAssoc, compArrRes, questionTitles);
     const questionTypesByTitle = questionTypesByTitleClosure(questionTitles);
     const questionTitlesToShortTitles = questionTitlesToShortTitlesClosure(questionTitles);
 
@@ -198,6 +198,13 @@ export default ({ arrangedResponses, compArrRes, resByAssoc, questionTitles }: {
     traverseSchemaForAnalysis(dataStructureSchema, resultsTree);
     debug('Traversing schema for analysis complete');
 
+    resultsTree['Remaining to be analyzed'] = [];
+    for (let i = 10; i < questionTitles.length; i++) { // Looking only at the actual questions presented to respondents
+        if (questionTitlesToShortTitles[questionTitles[i]] === undefined) {
+            resultsTree['Remaining to be analyzed'].push(questionTitles[i]);
+        }
+    }
+
     // Prep tree for output:
 
     const replaceArraysWithEmptyObjects = (obj, newObj) => {
@@ -258,7 +265,7 @@ export default ({ arrangedResponses, compArrRes, resByAssoc, questionTitles }: {
     // write tree in a certain order: look for groups in an order and pass them in that order if they exist
      */
 
-    const outputTree = [], groupOrder = ['All respondents', 'Current students', 'Current student parents', 'Teachers', 'Current student parents and teachers', 'Graduates', 'Graduate parents', 'Exit matter'];
+    const outputTree = [], groupOrder = ['All respondents', 'Current students', 'Current student parents/guardians', 'Current and former teachers', 'Current student parents/guardians and teachers', 'Graduates', 'Graduate parents/guardians', 'Exit matter', 'Remaining to be analyzed'];
     for (let group of groupOrder) {
         if (resultsTree[group] !== undefined) outputTree.push({
             title: group,

@@ -18,13 +18,13 @@ export default (
         singleChoiceStats = singleChoiceStatsClosure(resByAssoc),
         multiChoiceStats = multiChoiceStatsClosure(resByAssoc),
         multiGrpMultiChoiceStats = multiGrpMultiChoiceStatsClosure(resByAssoc),
-        // multiGrpSingleChoiceStats = multiGrpSingleChoiceStatsClosure(resByAssoc)
+        multiGrpSingleChoiceStats = multiGrpSingleChoiceStatsClosure(resByAssoc)
     ) => ({
     'total': () => compArrRes.length,
     'totalCurrStu': () => resByAssoc.cs.length,
     'totalGradStu': () => resByAssoc.gs.length,
-    'totalCurrStuParent': () => resByAssoc.csp.length,
-    'totalGradStuParent': () => resByAssoc.gsp.length,
+    'totalCurrStuParentGuardian': () => resByAssoc.csp.length,
+    'totalGradStuParentGuardian': () => resByAssoc.gsp.length,
     'totalTeacher': () => resByAssoc.t.length,
     'totalOther': () => resByAssoc.o.length,
     // currStu questions:
@@ -97,7 +97,6 @@ export default (
         [qT[109]]: agg => defaultStats(agg, likert3ToNumber, assoc.cs),
         // Reasons wouldn't ask peer?
         [qT[110]]: agg => multiChoiceStats(agg, assoc.cs, qT[110]),
-
     // currStuParent questions:
     [qT[14]]: agg => singleChoiceStats(agg, assoc.csp, qT[14]),
     [qT[15]]: agg => multiChoiceStats(agg, assoc.csp, qT[15]),
@@ -121,10 +120,101 @@ export default (
         [qT[49]]: agg => defaultStats(agg, likert3ToNumber, assoc.csp),
         [qT[50]]: agg => defaultStats(agg, likert3ToNumber, assoc.csp),
         [qT[51]]: agg => defaultStats(agg, likert3ToNumber, assoc.csp),
+    // teachers
+        // Likert 1:
+        [qT[18]]: agg => defaultStats(agg, likert5ToNumber, assoc.t),
+        [qT[19]]: agg => defaultStats(agg, likert5ToNumber, assoc.t),
+        [qT[20]]: agg => defaultStats(agg, likert5ToNumber, assoc.t),
+        [qT[21]]: agg => defaultStats(agg, likert5ToNumber, assoc.t),
+        [qT[22]]: agg => defaultStats(agg, likert5ToNumber, assoc.t),
+        [qT[23]]: agg => defaultStats(agg, likert5ToNumber, assoc.t),
+    [qT[24]]: agg => singleChoiceStats(agg, assoc.t, qT[24]),
+    [qT[25]]: agg => singleChoiceStats(agg, assoc.t, qT[25]),
+        // FIXME: default stats won't work here for indicating % of totals under branch that answered; but might not need it cause it's super specific to this group and can be figured out with some math
+        // Yes, every time Likert:
+        [qT[26]]: agg => defaultStats(agg, likert5ToNumber, assoc.t),
+        [qT[27]]: agg => defaultStats(agg, likert5ToNumber, assoc.t),
+        // Yes, not every time Likert:
+        [qT[28]]: agg => defaultStats(agg, likert5ToNumber, assoc.t),
+        [qT[29]]: agg => defaultStats(agg, likert5ToNumber, assoc.t),
+        [qT[30]]: agg => defaultStats(agg, likert5ToNumber, assoc.t),
+        [qT[31]]: agg => defaultStats(agg, likert5ToNumber, assoc.t),
+        // No, never Likert:
+        [qT[32]]: agg => defaultStats(agg, likert5ToNumber, assoc.t),
+        [qT[33]]: agg => defaultStats(agg, likert5ToNumber, assoc.t),
     // parents and teachers questions:
     [qT[140]]: agg => multiGrpMultiChoiceStats(agg, [assoc.csp, assoc.t], qT[140]),
     [qT[142]]: agg => multiGrpMultiChoiceStats(agg, [assoc.csp, assoc.t], qT[142]),
-    // [qT[144]]: agg => multiGrpSingleChoiceStats(agg, [assoc.csp, assoc.t], qT[144]),
+    [qT[144]]: agg => multiGrpSingleChoiceStats(agg, [assoc.csp, assoc.t], qT[144]),
     // gradStu questions:
     [qT[13]]: classYearStats,
+    [qT[112]]: agg => singleChoiceStats(agg, assoc.gs, qT[112]),
+    [qT[113]]: agg => singleChoiceStats(agg, assoc.gs, qT[113]),
+        // Likert 1:
+        [qT[114]]: agg => defaultStats(agg, likert3ToNumber, assoc.gs),
+        [qT[115]]: agg => defaultStats(agg, likert3ToNumber, assoc.gs),
+        [qT[116]]: agg => defaultStats(agg, likert3ToNumber, assoc.gs),
+        [qT[117]]: agg => defaultStats(agg, likert3ToNumber, assoc.gs),
+        [qT[118]]: agg => defaultStats(agg, likert3ToNumber, assoc.gs),
+        [qT[119]]: agg => defaultStats(agg, likert3ToNumber, assoc.gs),
+        [qT[120]]: agg => defaultStats(agg, likert3ToNumber, assoc.gs),
+        [qT[121]]: agg => defaultStats(agg, likert3ToNumber, assoc.gs),
+        [qT[122]]: agg => defaultStats(agg, likert3ToNumber, assoc.gs),
+        // Likert 2:
+        [qT[123]]: agg => defaultStats(agg, likert3ToNumber, assoc.gs),
+        [qT[124]]: agg => defaultStats(agg, likert3ToNumber, assoc.gs),
+        [qT[125]]: agg => defaultStats(agg, likert3ToNumber, assoc.gs),
+        [qT[126]]: agg => defaultStats(agg, likert3ToNumber, assoc.gs),
+        [qT[127]]: agg => defaultStats(agg, likert3ToNumber, assoc.gs),
+        [qT[128]]: agg => defaultStats(agg, likert3ToNumber, assoc.gs),
+        [qT[129]]: agg => defaultStats(agg, likert3ToNumber, assoc.gs),
+        [qT[130]]: agg => defaultStats(agg, likert3ToNumber, assoc.gs),
+        [qT[131]]: agg => defaultStats(agg, likert3ToNumber, assoc.gs),
+    [qT[132]]: agg => multiChoiceStats(agg, assoc.gs, qT[132]),
+    [qT[134]]: agg => multiChoiceStats(agg, assoc.gs, qT[134]),
+    [qT[136]]: agg => multiChoiceStats(agg, assoc.gs, qT[136]),
+    [qT[138]]: agg => multiChoiceStats(agg, assoc.gs, qT[138]),
+    // gradParent questions
+    [qT[16]]: agg => singleChoiceStats(agg, assoc.gsp, qT[16]),
+    [qT[17]]: classYearStats,
+        // Likert 1:
+        [qT[52]]: agg => defaultStats(agg, likert3ToNumber, assoc.gsp),
+        [qT[53]]: agg => defaultStats(agg, likert3ToNumber, assoc.gsp),
+        [qT[54]]: agg => defaultStats(agg, likert3ToNumber, assoc.gsp),
+        [qT[55]]: agg => defaultStats(agg, likert3ToNumber, assoc.gsp),
+        [qT[56]]: agg => defaultStats(agg, likert3ToNumber, assoc.gsp),
+        [qT[57]]: agg => defaultStats(agg, likert3ToNumber, assoc.gsp),
+        [qT[58]]: agg => defaultStats(agg, likert3ToNumber, assoc.gsp),
+        [qT[59]]: agg => defaultStats(agg, likert3ToNumber, assoc.gsp),
+        // Likert 2:
+        [qT[60]]: agg => defaultStats(agg, likert3ToNumber, assoc.gsp),
+        [qT[61]]: agg => defaultStats(agg, likert3ToNumber, assoc.gsp),
+        [qT[62]]: agg => defaultStats(agg, likert3ToNumber, assoc.gsp),
+        [qT[63]]: agg => defaultStats(agg, likert3ToNumber, assoc.gsp),
+        [qT[64]]: agg => defaultStats(agg, likert3ToNumber, assoc.gsp),
+        [qT[65]]: agg => defaultStats(agg, likert3ToNumber, assoc.gsp),
+        [qT[66]]: agg => defaultStats(agg, likert3ToNumber, assoc.gsp),
+        [qT[67]]: agg => defaultStats(agg, likert3ToNumber, assoc.gsp),
+    // Exit matter
+    [qT[145]]: agg => {
+        // steps: output all answers
+        // note how many total answered
+        // note how many total answered by assoc
+        const resWhoAnswered = compArrRes.filter(res => res.get(qT[145]) !== '' && res.get(qT[145]) !== '-99'); // FIXME: compArrRes usage
+        const resLenByAssoc = [assoc.cs, assoc.csp, assoc.gs, assoc.gsp, assoc.t].reduce((obj, assocName) => {
+            obj[assocName] = resWhoAnswered.filter(res => resByAssoc[assoc.revGet(assocName)].includes(res)).length;
+            return obj;
+        }, {});
+
+        return {
+            "All answers": agg.reduce((obj, ans) => {
+                obj[ans] = {};
+                return obj;
+            }, {}),
+            "% of respondents who answered": `${((resWhoAnswered.length / compArrRes.length) * 100).toFixed(2)}% (${resWhoAnswered.length})`,   // FIXME: using completed responses
+            "% who answered by association": { ...resLenByAssoc }
+        };
+    }
+    // FIXME: missing assoc.cs and % over 100
+    // [qT[146]]: agg => multiGrpSingleChoiceStats(agg, [assoc.cs, assoc.csp, assoc.gs, assoc.gsp, assoc.t], qT[146])
 });
