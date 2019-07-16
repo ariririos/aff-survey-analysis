@@ -8,5 +8,5 @@
         "noImplicitAny": false,
         "esModuleInterop": true
     },
-    "include": ["./*"]
+    "include": ["src/*.ts"]
 }

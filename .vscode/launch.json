@@ -5,12 +5,12 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/packaging.ts",
+            "program": "${workspaceFolder}/src/packaging.ts",
             "env": {
                 "DEBUG": "*"
             },
             "outFiles": [
-                "${workspaceFolder}/out/**/*.js"
+                "${workspaceFolder}/out/*/*.js"
             ]
         }
     ]

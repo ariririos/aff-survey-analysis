@@ -249,7 +249,7 @@ export default ({ arrangedResponses, compArrRes, resByAssoc, questionTitles }: {
 
     // Print graphic tree
     console.log('Survey analysis results');
-    console.log(treeify.asTree(coloredTree, true));
+    // console.log(treeify.asTree(coloredTree, true));
 
     // Restructure tree to send to server
     /**

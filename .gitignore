@@ -92,6 +92,7 @@ typings/
 
 # Private data
 affcsv.csv
+jsonData.json
 
 # Typescript output
 out/
