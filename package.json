@@ -4,8 +4,9 @@
   "description": "AFF Survey Analysis",
   "main": "packaging.js",
   "scripts": {
-    "start": "cp src/public/* out/public/ && tsc --lib esnext.array && node out/packaging.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node out/packaging.js",
+    "build": "rm -rf out/public; mkdir out/public; cp src/public/* out/public; tsc --lib esnext.array",
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -25,7 +26,8 @@
     "csv-parse": "^4.4.3",
     "debug": "^4.1.1",
     "express": "^4.17.1",
-    "treeify": "^1.1.0"
+    "treeify": "^1.1.0",
+    "typescript": "^3.5.3"
   },
   "engines": {
     "node": "12.6.0"
